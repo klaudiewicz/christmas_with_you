@@ -1,0 +1,875 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Christmas with you</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;800&display=swap"
+    />
+    <style>
+      :root {
+        --bg: #fff3de;
+        --card: #fffaf0;
+        --red: #c8312b;
+        --dred: #8e1f1c;
+        --green: #3f7d4e;
+        --ice: #cfe6fb;
+        --brown: #5a3a2a;
+        --ink: #3b2a22;
+        color-scheme: light;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Nunito, system-ui, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        min-height: 100vh;
+        background-image: linear-gradient(var(--ice) 0 0);
+        background-size: 100% 120px;
+        background-repeat: no-repeat;
+      }
+      .pf {
+        font-family: "Press Start 2P", monospace;
+        line-height: 1.5;
+      }
+      #snow {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+      #snow i {
+        position: absolute;
+        top: -10px;
+        background: #fff;
+        width: 6px;
+        height: 6px;
+        opacity: 0.9;
+        box-shadow: 0 0 0 2px #dff0ff;
+        animation: fall linear infinite;
+      }
+      @keyframes fall {
+        to {
+          transform: translateY(110vh) translateX(30px);
+        }
+      }
+      .wrap {
+        position: relative;
+        z-index: 1;
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 16px 14px 110px;
+      }
+      .px {
+        background: var(--card);
+        border: 4px solid var(--brown);
+        box-shadow: 4px 4px 0 var(--brown);
+        padding: 14px;
+        margin: 0 0 18px;
+      }
+      .px.r {
+        background: #fde4e0;
+        border-color: var(--dred);
+        box-shadow: 4px 4px 0 var(--dred);
+      }
+      .px.g {
+        background: #e3f3e6;
+        border-color: var(--green);
+        box-shadow: 4px 4px 0 var(--green);
+      }
+      .px.b {
+        background: #e6f2ff;
+        border-color: #2f6db0;
+        box-shadow: 4px 4px 0 #2f6db0;
+      }
+      h1 {
+        font-size: 15px;
+        margin: 0;
+        color: var(--dred);
+      }
+      h2 {
+        font-size: 11px;
+        margin: 0 0 10px;
+        color: var(--dred);
+      }
+      .btn {
+        font-family: "Press Start 2P", monospace;
+        font-size: 11px;
+        background: var(--red);
+        color: #fff;
+        border: 4px solid var(--dred);
+        box-shadow: 0 4px 0 var(--dred);
+        padding: 12px 14px;
+        cursor: pointer;
+        line-height: 1.4;
+      }
+      .btn:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 var(--dred);
+      }
+      .btn.s {
+        font-size: 9px;
+        padding: 8px 10px;
+        background: var(--green);
+        border-color: #2a5736;
+        box-shadow: 0 4px 0 #2a5736;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+      .xp {
+        height: 14px;
+        border: 3px solid var(--brown);
+        background: #fff;
+        margin-top: 6px;
+      }
+      .xp div {
+        height: 100%;
+        background: var(--green);
+      }
+      .small {
+        font-size: 13px;
+        opacity: 0.8;
+      }
+      nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 5;
+        background: var(--brown);
+        display: flex;
+        padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+        gap: 8px;
+        justify-content: center;
+      }
+      nav button {
+        flex: 1;
+        max-width: 170px;
+        font-family: "Press Start 2P", monospace;
+        font-size: 9px;
+        padding: 10px 4px;
+        background: #7a5440;
+        color: #ffe9c9;
+        border: 3px solid #3d2519;
+        cursor: pointer;
+      }
+      nav button.on {
+        background: var(--red);
+        color: #fff;
+        border-color: var(--dred);
+      }
+      .pick {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .pick button {
+        background: var(--card);
+        border: 4px solid var(--brown);
+        box-shadow: 4px 4px 0 var(--brown);
+        padding: 12px;
+        cursor: pointer;
+        flex: 1;
+        min-width: 140px;
+      }
+      .pick img,
+      .hero img {
+        image-rendering: pixelated;
+        width: 96px;
+        height: auto;
+        display: block;
+        margin: 0 auto 8px;
+      }
+      .door {
+        display: block;
+        width: 100%;
+        background: var(--red);
+        border: 4px solid var(--dred);
+        box-shadow: 0 6px 0 var(--dred);
+        color: #fff;
+        padding: 30px 10px;
+        cursor: pointer;
+        text-align: center;
+      }
+      .door b {
+        display: block;
+        font-family: "Press Start 2P", monospace;
+        font-size: 38px;
+        margin-bottom: 12px;
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      .row input {
+        width: 22px;
+        height: 22px;
+        margin-top: 4px;
+        accent-color: var(--green);
+        flex: none;
+      }
+      .road {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+      .node {
+        aspect-ratio: 1;
+        border: 4px solid var(--brown);
+        background: #fff;
+        font-family: "Press Start 2P", monospace;
+        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        cursor: pointer;
+        color: var(--ink);
+        padding: 0;
+      }
+      .node.lock {
+        background: #dfe9f3;
+        border-color: #90a6bd;
+        color: #7e92a8;
+        cursor: default;
+      }
+      .node.done {
+        background: #d5efd9;
+        border-color: var(--green);
+      }
+      .node.now {
+        background: #ffe08a;
+        border-color: var(--red);
+        animation: pulse 1s steps(2) infinite;
+      }
+      @keyframes pulse {
+        50% {
+          transform: scale(1.07);
+        }
+      }
+      .node span {
+        font-size: 15px;
+        font-family: Nunito, sans-serif;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .chip {
+        font-size: 12px;
+        background: #fff;
+        border: 2px solid var(--brown);
+        padding: 3px 7px;
+        cursor: pointer;
+        font-family: Nunito, sans-serif;
+        color: var(--ink);
+      }
+      .big {
+        font-size: 19px;
+        font-weight: 800;
+        margin: 6px 0;
+      }
+      .badge {
+        display: inline-block;
+        font-size: 12px;
+        background: #fff;
+        border: 2px solid var(--brown);
+        padding: 2px 8px;
+        margin: 2px 4px 2px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="snow"></div>
+    <div class="wrap" id="app"></div>
+    <script>
+      var K = [
+        "Napisz ukochanemu liścik z trzema rzeczami, które w nim kochasz, i schowaj go w kieszeni jego kurtki.",
+        "Zrób ukochanemu poranną kawę lub herbatę do łóżka. Jeśli zrobisz to dla siebie – też się liczy :)",
+        "Włączcie świąteczną playlistę i zatańczcie jedną piosenkę w kuchni.",
+        "Ciepły kocyk, lampki i gorąca czekolada – urządź wieczór bez telefonów we dwoje.",
+        "Upiecz coś z cynamonem, żeby w domu zapachniało świętami.",
+        "Mikołajki! Włóż do jego butów małą słodkość z karteczką.",
+        "Zapytaj ukochanego o najpiękniejsze świąteczne wspomnienie z dzieciństwa i wysłuchaj do końca.",
+        "Zrób ukochanemu 10-minutowy masaż karku. A jeśli to Ty – zamów dokładkę!",
+        "Wyślij mu w ciągu dnia czułą wiadomość, bez żadnej prośby w tle.",
+        "Zróbcie wspólne zdjęcie i zapiszcie je do albumu świątecznych wspomnień.",
+        "Przygotuj jego ulubioną kolację. Albo swoją – dziś dbasz o siebie!",
+        "Wybierzcie razem prezent dla kogoś bliskiego i zamówcie go wspólnie.",
+        "Pochwal ukochanego szczerze za coś, co zrobił w tym roku. Konkretnie, od serca.",
+        "Zaplanujcie wspólny wolny wieczór po świętach – kino, spacer, cokolwiek we dwoje.",
+        "Zrób dziś coś tylko dla siebie: kąpiel, maseczka, książka. Odpoczynek to też przygotowanie do świąt.",
+        "Napisz kartkę świąteczną do ukochanego – ręcznie, z jednym szczerym zdaniem.",
+        "Zaproponuj wieczór ze świątecznym filmem i popcornem; wybór filmu zostaw jemu.",
+        "Przytul ukochanego na 20 sekund w ciszy. Serio, to działa.",
+        "Powiedz mu, za co jesteś wdzięczna w tym roku – trzy rzeczy.",
+        "Zaskocz go po pracy ulubioną przekąską i ciepłym napojem.",
+        "Najdłuższa noc roku – zapalcie świeczki i posiedźcie razem przy ich świetle.",
+        "Pomóż ukochanemu w czymś, czego nie lubi robić – albo poproś, żeby on pomógł Tobie.",
+        "Spiszcie razem listę rzeczy, z których jesteście dumni w mijającym roku.",
+        "Wigilia! Wręcz ukochanemu swoje najczulsze życzenia i podziękuj za cały rok.",
+      ];
+      var M = [
+        "Powieś z ukochaną lampki – albo daj jej znać, że to Twoja robota na dziś :)",
+        "Zrób ukochanej poranną herbatę lub kawę do łóżka. Dla siebie też możesz!",
+        "Przygotuj dla niej kąpiel: świeczki, bąbelki i spokojna muzyka.",
+        "Napisz jej liścik z trzema rzeczami, które w niej uwielbiasz, i schowaj go w torebce.",
+        "Przejmij dziś gotowanie obiadu i nie pozwól jej wejść do kuchni.",
+        "Mikołajki! Schowaj w jej butach małą niespodziankę z karteczką.",
+        "Zapytaj żonę, jak się czuje przed świętami, i po prostu wysłuchaj – bez dobrych rad.",
+        "Zrób jej 10-minutowy masaż stóp. Dla siebie – poproś o rewanż!",
+        "Wyślij jej w ciągu dnia czułą wiadomość, bez żadnej prośby.",
+        "Kup jej ulubione słodycze albo kwiaty bez okazji.",
+        "Upiecz pierniczki przed jej powrotem, żeby zaskoczyć ją wspólnym dekorowaniem.",
+        "Pochwal ukochaną szczerze za coś, co zrobiła w tym roku. Konkretnie.",
+        "Weź dziś na siebie wszystkie obowiązki domowe, żeby mogła odpocząć.",
+        "Zaplanuj randkę po świętach i zarezerwuj miejsce.",
+        "Zrób dziś coś tylko dla siebie: spacer, trening, ulubiona gra. Odpoczynek się liczy!",
+        "Napisz kartkę świąteczną do ukochanej – ręcznie, z jednym szczerym zdaniem.",
+        "Zaproponuj wieczór ze świątecznym filmem; wybór filmu zostaw jej.",
+        "Przytul ukochaną na 20 sekund w ciszy. Serio, to działa.",
+        "Powiedz jej, za co jesteś wdzięczny w tym roku – trzy rzeczy.",
+        "Odbierz ją z pracy albo spotkaj się z nią po drodze z gorącym napojem.",
+        "Najdłuższa noc roku – zapal świeczki i posiedźcie razem przy ich świetle.",
+        "Zajmij się dziś zakupami lub pakowaniem prezentów, żeby miała chwilę wytchnienia.",
+        "Spiszcie razem listę rzeczy, z których jesteście dumni w mijającym roku.",
+        "Wigilia! Wręcz ukochanej swoje najczulsze życzenia i podziękuj za cały rok.",
+      ];
+      var H = [
+        "Powieście lampki na oknach i wyciągnijcie pudła z ozdobami.",
+        "Wyczyść kurze ze wszystkich szafek!",
+        "Przejrzyj szafę i odłóż ubrania do oddania.",
+        "Spiszcie listę prezentów i zakupów spożywczych.",
+        "Umyj lodówkę od środka i wyrzuć stare produkty.",
+        "Czas na okna – umyj je i parapety.",
+        "Generalne pranie: zasłony, firanki, koce.",
+        "Wypierz pościel i odśwież materace.",
+        "Wyczyść piekarnik – za chwilę będzie pracował na pełnych obrotach.",
+        "Odkurz dokładnie dywany i tapicerkę.",
+        "Pora na pierniczki – ciasto na odpoczynek już dziś!",
+        "Zrób stroik lub wieniec na drzwi albo stół.",
+        "Uporządkuj piwnicę, balkon lub komórkę.",
+        "Sprawdź ozdoby choinkowe i zamów brakujące.",
+        "Wyszoruj łazienkę na błysk.",
+        "Zrób główne zakupy z długą datą ważności.",
+        "Zapakujcie prezenty – wstążki, papier i karteczki.",
+        "Wypierz i wyprasuj obrus oraz serwetki.",
+        "Ulep pierogi lub uszka i zamroź na Wigilię.",
+        "Ubierzcie razem choinkę!",
+        "Umyj podłogi we wszystkich pokojach.",
+        "Posprzątaj kuchnię i upiecz ciasto.",
+        "Ugotuj bazy potraw: barszcz, farsze, kapustę.",
+        "Nakryj stół: sianko pod obrusem i wolne miejsce dla gościa.",
+      ];
+      var Q = [
+        "Światło świeczki nie ubywa, gdy dzieli się nim z drugą.",
+        "Najlepsze prezenty nie mieszczą się w pudełkach.",
+        "Dom pachnie świętami tam, gdzie ktoś na kogoś czeka.",
+        "Śnieg jest cichy, a miłość słychać najgłośniej.",
+        "Małe gesty budują wielkie wspomnienia.",
+        "Dobro najlepiej smakuje podane po cichu.",
+        "Razem nawet zimowy wieczór robi się letni.",
+        "Czułość to najcieplejszy sweter.",
+        "Święta zaczynają się tam, gdzie kończy się pośpiech.",
+        "Uśmiech to najtańsza ozdoba choinki.",
+        "Prawdziwa magia to ktoś, kto zapamiętał Twoje ulubione ciastko.",
+        "Każdy dzień adwentu to kroczek bliżej siebie.",
+        "Dziękuję to jedno z najpiękniejszych słów zimy.",
+        "Nie musi być idealnie, ma być razem.",
+        "Cierpliwość jest najlepszą przyprawą do piernika.",
+        "Dobre słowo ogrzewa dłużej niż kominek.",
+        "Kto czeka z sercem, ten nie czeka na próżno.",
+        "Zimowy wieczór i dwie filiżanki to cały świat.",
+        "Pamięć o dobrych chwilach to światełka na całe życie.",
+        "Wspólne śmiechy są lepsze niż najdroższe lampki.",
+        "Gdy noc najdłuższa, najlepiej być blisko.",
+        "Pomoc podana w porę to prezent bez opakowania.",
+        "Wdzięczność zmienia zwykły dzień w święto.",
+        "Dziś w całym domu pachnie miłością.",
+      ];
+      var F = [
+        "Słowo adwent pochodzi od łacińskiego adventus, czyli przyjście. Trwa cztery niedziele przed Bożym Narodzeniem. Wieniec adwentowy z czterema świecami wymyślił w 1839 roku niemiecki pastor Johann Hinrich Wichern.",
+        "Roraty to msze odprawiane o świcie w adwencie, często przy światłach lampionów. Nazwa pochodzi od pierwszych słów łacińskiej pieśni Rorate caeli. Światło lampionów symbolizuje oczekiwanie na przyjście Jezusa.",
+        "Pierwsza kartka świąteczna powstała w 1843 roku z pomysłu Sir Henry’ego Cole’a. Projekt wykonał John Callcott Horsley, a kartka przedstawiała rodzinę przy świątecznym stole. Dziś wysyła się miliardy kartek na całym świecie.",
+        "4 grudnia przypada wspomnienie św. Barbary, patronki górników. Według tradycji ucięte tego dnia gałązki wiśni, zwane barbarkami, kwitną na Wigilię. Kwitnąca gałązka miała zapowiadać szczęście i rychły ślub.",
+        "Toruński piernik znany jest od średniowiecza, a jego sekret to miód i przyprawy korzenne. Dawniej uważano, że pierniki mają moc ochronną i przynoszą zdrowie. Dziś pierniczki to jedna z najmilszych świątecznych tradycji.",
+        "Św. Mikołaj był biskupem Miry w IV wieku i słynął z pomagania biednym. Według legendy po cichu wrzucał złote monety do domów potrzebujących. Stąd wzięła się tradycja prezentów w butach rano 6 grudnia.",
+        "Pierwsze ozdobione drzewka znamy z XVI-wiecznej Alzacji. W Polsce choinka na dobre zagościła w domach dopiero w XIX wieku. Początkowo ozdabiano ją jabłkami, orzechami i papierowymi łańcuchami.",
+        "Najstarsze polskie kolędy znamy z XV wieku. Pieśń Bóg się rodzi napisał Franciszek Karpiński w 1792 roku. Do dziś śpiewa się ją w niemal każdym polskim domu podczas świąt.",
+        "Opłatek to cienki, przaśny chleb, którym dzielimy się przed wieczerzą wigilijną. Dzielenie się nim i składanie życzeń symbolizuje wybaczenie i jedność. Tradycja ta jest w Polsce żywa od wieków.",
+        "Siano pod obrusem wigilijnym przypomina żłóbek, w którym złożono Jezusa. Wyciągnięte źdźbło dawniej wróżyło los w nadchodzącym roku. Zielone źdźbło oznaczało szczęście, a ciemne – kłopoty.",
+        "Na polskim stole wigilijnym tradycyjnie jest dwanaście postnych potraw. Liczba nawiązuje do dwunastu apostołów, a według innych wersji do miesięcy w roku. Spróbowanie każdej potrawy ma zapewnić pomyślność.",
+        "Wypatrywanie pierwszej gwiazdki nawiązuje do gwiazdy betlejemskiej, która poprowadziła Trzech Króli. Wieczerza wigilijna rozpoczyna się, gdy gwiazdka pojawi się na niebie. To zwyczaj, który szczególnie cieszy dzieci.",
+        "13 grudnia obchodzimy dzień św. Łucji, patronki światła. W Szwecji dziewczynki w białych szatach i wieńcach ze świec otwierają świąteczny sezon. Dzień ten dawniej uchodził za jeden z najkrótszych w roku.",
+        "Karp zagościł na polskich stołach wigilijnych na dobre w XX wieku. Kupowano go żywego i trzymano w wannie do Wigilii. Łuski z karpia wkłada się do portfela na pomyślność i pieniądze.",
+        "Szklane bombki wymyślono w XIX wieku w niemieckiej Lauschy. Według przekazów powodem była bieda – szklarz nie mógł kupić orzechów i jabłek do ozdób. Dziś bombki wydmuchuje się też w Polsce, a najsłynniejsze powstają ręcznie.",
+        "Całowanie pod jemiołą to zwyczaj angielski. Jemioła od dawna symbolizowała płodność, szczęście i ochronę domu. Wieszano ją nad drzwiami i stołem.",
+        "Szopka krakowska od 2018 roku jest na liście UNESCO. Ma architektoniczny wygląd, bo budowniczowie czerpali z krakowskich zabytków. Co roku w pierwszy czwartek grudnia odbywa się konkurs szopek pod pomnikiem Adama Mickiewicza.",
+        "Film Kevin sam w domu miał premierę w 1990 roku. W Polsce stał się nieodłączną częścią świątecznego telewizyjnego kalendarza. Pierwsza emisja w polskiej telewizji miała miejsce w latach 90.",
+        "Poinsecja, zwana gwiazdą betlejemską, pochodzi z Meksyku. Nazwę zawdzięcza Joelowi Poinsettowi, amerykańskiemu ambasadorowi, który sprowadził ją do USA. Czerwone liście to przylistki, a nie kwiaty.",
+        "Pasterka to msza odprawiana o północy z 24 na 25 grudnia. Upamiętnia pasterzy, którzy jako pierwsi przyszli pokłonić się nowo narodzonemu Jezusowi. W wielu miejscowościach poprzedza ją śpiewanie kolęd.",
+        "21 grudnia to przesilenie zimowe i najdłuższa noc w roku. Dawni Słowianie świętowali wtedy Szczodre Gody i palili ogniska. Od tego dnia dni zaczynają się wydłużać, co dawało nadzieję.",
+        "Według legendy cukrowa laska w kształcie pastorału powstała w XVII wieku w Niemczech. Miała uspokajać dzieci podczas długiej mszy. Dziś ozdabia choinki i pierniczki na całym świecie.",
+        "Mak w kutii i makowcu symbolizuje dostatek i pomyślność. W tradycji wschodniej kutia jest jedną z najważniejszych potraw wigilijnych. Ugotowana pszenica oznacza wzrost, a miód słodycz życia.",
+        "Słowo wigilia pochodzi z łacińskiego vigilia, czyli czuwanie. Przy stole zostawia się puste miejsce dla niespodziewanego gościa. 24 grudnia to też imieniny Adama i Ewy, pierwszych ludzi.",
+      ];
+      var INS = {
+        film: {
+          t: "Film do obejrzenia",
+          i: "🎬",
+          l: [
+            "Kevin sam w domu",
+            "To właśnie miłość",
+            "Listy do M.",
+            "Grinch",
+            "Elf",
+            "Szklana pułapka",
+            "Holiday",
+            "Opowieść wigilijna",
+            "Polarny Ekspres",
+            "Cud na 34. ulicy",
+            "Last Christmas",
+            "Kiedy spadnie śnieg (Klaus)",
+          ],
+        },
+        song: {
+          t: "Piosenka do posłuchania",
+          i: "🎵",
+          l: [
+            "Last Christmas – Wham!",
+            "All I Want for Christmas Is You – Mariah Carey",
+            "Driving Home for Christmas – Chris Rea",
+            "Let It Snow – Dean Martin",
+            "Cicha noc",
+            "Bóg się rodzi",
+            "Lulajże, Jezuniu",
+            "Wśród nocnej ciszy",
+            "Santa Baby – Eartha Kitt",
+            "Fairytale of New York – The Pogues",
+            "Jingle Bell Rock",
+            "Merry Christmas Everyone – Shakin’ Stevens",
+          ],
+        },
+        dish: {
+          t: "Potrawa z Thermomixa",
+          i: "🍲",
+          l: [
+            "Barszcz czerwony – ugotuj wywar w misie, zagotuj z burakami",
+            "Uszka – ciasto zagnieć w misie, farsz z grzybami także",
+            "Ciasto na pierogi – zagniecione w kilka minut",
+            "Kutia – ugotuj pszenicę, mak zmiel w misie",
+            "Makowiec – masa makowa gotowa w misie",
+            "Piernik staropolski – zmiksuj składniki i piecz",
+            "Zupa grzybowa – podsmaż cebulę i zmiksuj",
+            "Sałatka jarzynowa – warzywa w Varomie",
+            "Ryba po grecku – warzywa duszone w misie",
+            "Sernik – zmiksuj masę serową w misie",
+            "Kompot z suszu – słodkie i aromatyczne",
+            "Pierniczki – ciasto wyrobione w misie",
+          ],
+        },
+      };
+      var PAL = {
+        R: "#c8312b",
+        W: "#eaf6ff",
+        S: "#f6c9a0",
+        H: "#7a4a2a",
+        K: "#2a1a14",
+        P: "#f08a8a",
+        G: "#3f7d4e",
+        B: "#5a3a2a",
+        O: "#f08a1c",
+        T: "#8b5a2b",
+      };
+      var GIRL = [
+        "......RR.WW.",
+        "....RRRRRWW.",
+        "...RRRRRRRR.",
+        "..WWWWWWWWW.",
+        "..HSSSSSSSH.",
+        "..HSKSSKSSH.",
+        "..HSSSSSSSH.",
+        "..HSPSSSPSH.",
+        ".HHSSSSSSSHH",
+        ".H.GGGGGGG.H",
+        "...GGWGWGG..",
+        "...GGGGGGG..",
+        "....BB..BB..",
+        "...BBB..BBB.",
+      ];
+      var MAN = [
+        "...KKKKKK...",
+        "...KKKKKK...",
+        "...RRRRRR...",
+        "..KKKKKKKK..",
+        "...WWWWWW...",
+        "..WWKWWKWW..",
+        "..WWWOOWWW..",
+        "...WWWWWW...",
+        "..RRRRRRRR..",
+        ".TWWWWWWWWT.",
+        "TWWWWKWWWWWT",
+        ".WWWWWWWWWW.",
+        ".WWWWKWWWWW.",
+        "..WWWWWWWW..",
+      ];
+      var S = PAL;
+      function spr(rows) {
+        var c = document.createElement("canvas");
+        c.width = 12;
+        c.height = rows.length;
+        var x = c.getContext("2d");
+        rows.forEach(function (r, y) {
+          for (var i = 0; i < 12; i++) {
+            var ch = r[i];
+            if (ch !== ".") {
+              x.fillStyle = PAL[ch];
+              x.fillRect(i, y, 1, 1);
+            }
+          }
+        });
+        return c.toDataURL();
+      }
+      var KEY = "adwent_v1",
+        ST = {
+          g: null,
+          open: {},
+          done: {},
+          hdone: {},
+          test: null,
+          v: null,
+          xpBonus: 0,
+        },
+        tab = 0;
+      try {
+        var raw = localStorage.getItem(KEY);
+        if (raw) ST = Object.assign(ST, JSON.parse(raw));
+      } catch (e) {}
+      function save() {
+        try {
+          localStorage.setItem(KEY, JSON.stringify(ST));
+        } catch (e) {}
+      }
+      function today() {
+        if (ST.test !== null) return ST.test;
+        var n = new Date();
+        if (n.getMonth() < 11) return 0;
+        return Math.min(n.getDate(), 24);
+      }
+      function cnt(o) {
+        return Object.keys(o).length;
+      }
+      function xp() {
+        return cnt(ST.open) * 10 + cnt(ST.done) * 15 + cnt(ST.hdone) * 10;
+      }
+      var LV = [
+        "Śnieżynka",
+        "Pomocnik Elfa",
+        "Mistrz Piernika",
+        "Strażnik Choinki",
+        "Bohater Świąt",
+      ];
+      function left(d) {
+        var n = 24 - d;
+        if (n === 0) return "Dziś Wigilia!";
+        if (n === 1) return "Został 1 dzień do świąt!";
+        if (n < 5) return "Zostały " + n + " dni do świąt!";
+        return "Zostało " + n + " dni do świąt!";
+      }
+      function snow() {
+        var s = document.getElementById("snow");
+        for (var i = 0; i < 26; i++) {
+          var e = document.createElement("i");
+          e.style.left = Math.random() * 100 + "%";
+          e.style.animationDuration = 8 + Math.random() * 10 + "s";
+          e.style.animationDelay = -Math.random() * 14 + "s";
+          e.style.transform = "scale(" + (0.6 + Math.random()) + ")";
+          s.appendChild(e);
+        }
+      }
+      function render() {
+        var a = document.getElementById("app");
+        if (!ST.g) {
+          a.innerHTML =
+            '<div style="text-align:center;padding-top:20px"><h1 class="pf" style="font-size:18px">ADWENTOWA<br>PRZYGODA</h1><p>Kalendarz adwentowy dla dwojga. Kim jesteś?</p><div class="pick"><button data-a="pick" data-g="k"><img src="' +
+            spr(GIRL) +
+            '" alt=""><div class="pf" style="font-size:11px">ONA</div></button><button data-a="pick" data-g="m"><img src="' +
+            spr(MAN) +
+            '" alt=""><div class="pf" style="font-size:11px">ON</div></button></div><p class="small">Wybór zapamiętamy na stałe.</p></div>';
+          return;
+        }
+        var x = xp(),
+          lv = Math.min(4, Math.floor(x / 60)),
+          pct = Math.min(100, ((x % 60) / 60) * 100);
+        if (lv === 4) pct = 100;
+        var h =
+          '<div class="top"><div style="flex:1"><h1 class="pf">ADWENT</h1><div class="small">Poziom ' +
+          (lv + 1) +
+          ": " +
+          LV[lv] +
+          " · " +
+          x +
+          ' XP</div><div class="xp"><div style="width:' +
+          pct +
+          '%"></div></div></div><img src="' +
+          spr(ST.g === "k" ? GIRL : MAN) +
+          '" style="width:56px;image-rendering:pixelated" alt=""></div>';
+        h += tab === 0 ? tToday() : tab === 1 ? tRoad() : tInspo();
+        h +=
+          '<nav><button class="' +
+          (tab === 0 ? "on" : "") +
+          '" data-a="tab" data-i="0">🎁 DZIŚ</button><button class="' +
+          (tab === 1 ? "on" : "") +
+          '" data-a="tab" data-i="1">🛷 DROGA</button><button class="' +
+          (tab === 2 ? "on" : "") +
+          '" data-a="tab" data-i="2">🎄 INSPO</button></nav>';
+        a.innerHTML = h;
+      }
+      function tToday() {
+        var t = today(),
+          d = ST.v || t;
+        if (t === 0) {
+          return '<div class="px b"><h2 class="pf">JESZCZE CHWILA!</h2><p>Okienka otworzą się 1 grudnia. Do tego czasu odpocznij i przygotuj ciepłą herbatę.</p><button class="btn" data-a="test" data-d="1">PODEJRZYJ OKIENKO 1</button><p class="small">Tryb testowy tylko do podglądu aplikacji.</p></div>';
+        }
+        if (d > t) d = t;
+        var h = "";
+        if (!ST.open[d]) {
+          return (
+            '<div class="px"><h2 class="pf">OKIENKO NR ' +
+            d +
+            '</h2><button class="door" data-a="open" data-d="' +
+            d +
+            '"><b>' +
+            d +
+            '</b><span class="pf" style="font-size:10px">KLIKNIJ, ABY OTWORZYĆ</span></button></div>' +
+            testBox(t)
+          );
+        }
+        var task = (ST.g === "k" ? K : M)[d - 1];
+        h +=
+          '<div class="px r"><h2 class="pf">DZIEŃ ' +
+          d +
+          '</h2><p class="big">' +
+          left(d) +
+          '</p><label class="row"><input type="checkbox" data-a="done" data-d="' +
+          d +
+          '" ' +
+          (ST.done[d] ? "checked" : "") +
+          "><span>" +
+          task +
+          "</span></label></div>";
+        h +=
+          '<div class="px g"><h2 class="pf">BOJOWE WYZWANIE</h2><label class="row"><input type="checkbox" data-a="hdone" data-d="' +
+          d +
+          '" ' +
+          (ST.hdone[d] ? "checked" : "") +
+          "><span>" +
+          H[d - 1] +
+          "</span></label></div>";
+        h +=
+          '<div class="px"><h2 class="pf">CYTAT DNIA</h2><p><i>„' +
+          Q[d - 1] +
+          "”</i></p></div>";
+        h +=
+          '<div class="px b"><h2 class="pf">CIEKAWOSTKA</h2><p>' +
+          F[d - 1] +
+          "</p></div>";
+        return h + testBox(t);
+      }
+      function testBox(t) {
+        return ST.test !== null
+          ? '<p class="small">Tryb testowy aktywny (dzień ' +
+              ST.test +
+              '). <button class="chip" data-a="test" data-d="' +
+              Math.min(24, ST.test + 1) +
+              '">dzień +</button> <button class="chip" data-a="test" data-d="' +
+              Math.max(1, ST.test - 1) +
+              '">dzień −</button> <button class="chip" data-a="test" data-d="off">wyłącz</button></p>'
+          : "";
+      }
+      function tRoad() {
+        var t = today(),
+          h =
+            '<div class="px"><h2 class="pf">DROGA DO WIGILII</h2><p class="small">Dotknij otwartego dnia, aby wrócić do jego zadań. Każdy otwarty dzień to +10 XP.</p><div class="road">';
+        for (var i = 1; i <= 24; i++) {
+          var c =
+            i > t
+              ? "lock"
+              : ST.done[i] && ST.hdone[i]
+                ? "done"
+                : i === t
+                  ? "now"
+                  : "";
+          var ic =
+            i > t
+              ? "🔒"
+              : i === 24
+                ? "⭐"
+                : ST.done[i] && ST.hdone[i]
+                  ? "✅"
+                  : i === t
+                    ? "🛷"
+                    : i === 6
+                      ? "🎅"
+                      : i === 13
+                        ? "🕯️"
+                        : "❄️";
+          h +=
+            '<button class="node ' +
+            c +
+            '" data-a="go" data-d="' +
+            i +
+            '" ' +
+            (i > t ? "disabled" : "") +
+            ">" +
+            i +
+            "<span>" +
+            ic +
+            "</span></button>";
+        }
+        h += '</div></div><div class="px g"><h2 class="pf">OSIĄGNIĘCIA</h2>';
+        var b = [];
+        if (cnt(ST.open) >= 1) b.push("Pierwsze okienko");
+        if (cnt(ST.done) >= 5) b.push("5 gestów miłości");
+        if (cnt(ST.hdone) >= 5) b.push("5 domowych bitew");
+        if (cnt(ST.open) >= 12) b.push("Półmetek adwentu");
+        if (cnt(ST.open) >= 24) b.push("Wigilijny bohater");
+        h += b.length
+          ? b
+              .map(function (x) {
+                return '<span class="badge">🏅 ' + x + "</span>";
+              })
+              .join("")
+          : '<p class="small">Otwieraj okienka i wykonuj zadania, aby zdobyć odznaki.</p>';
+        h +=
+          '<p class="small">Gestów miłości: ' +
+          cnt(ST.done) +
+          "/24 · Domowych wyzwań: " +
+          cnt(ST.hdone) +
+          "/24</p></div>";
+        h +=
+          '<div class="px"><button class="chip" data-a="reset">Zmień rolę lub zacznij od nowa</button></div>';
+        return h;
+      }
+      var PK = {};
+      function tInspo() {
+        var h = "";
+        ["film", "song", "dish"].forEach(function (k) {
+          var o = INS[k],
+            p = PK[k] !== undefined ? PK[k] : 0;
+          h +=
+            '<div class="px ' +
+            (k === "film" ? "r" : k === "song" ? "b" : "g") +
+            '"><h2 class="pf">' +
+            o.i +
+            " " +
+            o.t.toUpperCase() +
+            '</h2><p class="big">' +
+            o.l[p] +
+            '</p><button class="btn s" data-a="rnd" data-k="' +
+            k +
+            '">LOSUJ</button><div class="chips">' +
+            o.l
+              .map(function (x, i) {
+                return (
+                  '<button class="chip" data-a="sel" data-k="' +
+                  k +
+                  '" data-i="' +
+                  i +
+                  '">' +
+                  x.split(" –")[0] +
+                  "</button>"
+                );
+              })
+              .join("") +
+            "</div></div>";
+        });
+        return h;
+      }
+      document.addEventListener("click", function (e) {
+        var el = e.target.closest("[data-a]");
+        if (!el) return;
+        var a = el.dataset.a,
+          d = +el.dataset.d;
+        if (a === "pick") {
+          ST.g = el.dataset.g;
+        } else if (a === "tab") {
+          tab = +el.dataset.i;
+        } else if (a === "open") {
+          ST.open[d] = 1;
+          ST.v = d;
+        } else if (a === "go") {
+          ST.v = d;
+          tab = 0;
+        } else if (a === "test") {
+          if (el.dataset.d === "off") {
+            ST.test = null;
+            ST.v = null;
+          } else {
+            ST.test = d;
+            ST.v = d;
+          }
+        } else if (a === "rnd") {
+          var o = INS[el.dataset.k];
+          PK[el.dataset.k] = Math.floor(Math.random() * o.l.length);
+        } else if (a === "sel") {
+          PK[el.dataset.k] = +el.dataset.i;
+        } else if (a === "reset") {
+          if (confirm("Na pewno? Cały postęp zostanie usunięty.")) {
+            ST = {
+              g: null,
+              open: {},
+              done: {},
+              hdone: {},
+              test: null,
+              v: null,
+            };
+            tab = 0;
+          }
+        } else return;
+        save();
+        render();
+      });
+      document.addEventListener("change", function (e) {
+        var el = e.target;
+        if (!el.dataset || !el.dataset.a) return;
+        var d = +el.dataset.d,
+          m = el.dataset.a === "done" ? ST.done : ST.hdone;
+        if (el.dataset.a !== "done" && el.dataset.a !== "hdone") return;
+        if (el.checked) m[d] = 1;
+        else delete m[d];
+        save();
+        render();
+      });
+      snow();
+      render();
+    </script>
+  </body>
+</html>
