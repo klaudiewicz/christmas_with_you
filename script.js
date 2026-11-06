@@ -29,7 +29,7 @@ function spr(rows) {
   return c.toDataURL();
 }
 
-var KEY = "adwent_v1",
+var KEY = "adwent_v2",
   ST = {
     g: null,
     open: {},
@@ -45,6 +45,9 @@ try {
   var raw = localStorage.getItem(KEY);
   if (raw) ST = Object.assign(ST, JSON.parse(raw));
 } catch (e) {}
+
+// Zachowaj kompatybilność ze starszym zapisem, w którym istniał tylko wybór ONA/ON.
+if (ST.g && !ST.mode) ST.mode = "couple";
 
 function save() {
   try {
@@ -97,21 +100,50 @@ function snow() {
 
 function render() {
   var a = document.getElementById("app");
-  if (!ST.g) {
+
+  // Ekran 1: wybór rodzaju kalendarza.
+  if (!ST.mode) {
     a.innerHTML =
-      '<div style="text-align:center;padding-top:20px"><h1 class="pf" style="font-size:18px">ADWENTOWA<br>PRZYGODA</h1><p>Kalendarz adwentowy dla dwojga. Kim jesteś?</p><div class="pick"><button data-a="pick" data-g="k"><img src="' +
+      '<div style="text-align:center;padding:24px 10px">' +
+      '<h1 class="pf" style="font-size:18px">Christmas with you</h1>' +
+      "<p>Jak chcesz przeżyć tegoroczny Adwent?</p>" +
+      '<div class="pick">' +
+      '<button data-a="mode" data-mode="couple"><div style="font-size:38px">❤️</div><div class="pf" style="font-size:11px">Z PARTNEREM</div><h2 class="small">Kalendarz dla dwojga</h2></button>' +
+      '<button data-a="mode" data-mode="solo"><div style="font-size:38px">✨</div><div class="pf" style="font-size:11px">SAMODZIELNIE</div><h2 class="small">Bliscy, przyjaciele i trochę czasu dla siebie</h2></button>' +
+      '</div><p class="small">Wybór możesz zmienić, rozpoczynając kalendarz od nowa.</p></div>';
+    return;
+  }
+
+  // Ekran 2 tylko dla wersji dla pary: wybór wariantu zadań.
+  if (ST.mode === "couple" && !ST.g) {
+    a.innerHTML =
+      '<div style="text-align:center;padding-top:20px"><h1 class="pf" style="font-size:18px">Christmas with you</h1>' +
+      '<p>Kto będzie wykonywać zadania?</p><div class="pick">' +
+      '<button data-a="pick" data-g="k"><img src="' +
       spr(GIRL) +
       '" alt=""><div class="pf" style="font-size:11px">ONA</div></button><button data-a="pick" data-g="m"><img src="' +
       spr(MAN) +
-      '" alt=""><div class="pf" style="font-size:11px">ON</div></button></div><p class="small">Wybór zapamiętamy na stałe.</p></div>';
+      '" alt=""><div class="pf" style="font-size:11px">ON</div></button></div>' +
+      '<p class="small">Wybór zapamiętamy na stałe.</p></div>';
     return;
   }
+
   var x = xp(),
     lv = Math.min(4, Math.floor(x / 60)),
     pct = Math.min(100, ((x % 60) / 60) * 100);
   if (lv === 4) pct = 100;
+
+  var avatar =
+    ST.mode === "solo"
+      ? '<div style="font-size:42px" aria-label="samodzielny kalendarz">✨</div>'
+      : '<img src="' +
+        spr(ST.g === "k" ? GIRL : MAN) +
+        '" style="width:56px;image-rendering:pixelated" alt="">';
+
   var h =
-    '<div class="top"><div style="flex:1"><h1 class="pf">ADWENT</h1><div class="small">Poziom ' +
+    '<div class="top"><div style="flex:1"><h1 class="pf">ADWENT</h1><div class="small">' +
+    (ST.mode === "solo" ? "Twój kalendarz · " : "Kalendarz dla dwojga · ") +
+    "Poziom " +
     (lv + 1) +
     ": " +
     LV[lv] +
@@ -119,9 +151,10 @@ function render() {
     x +
     ' XP</div><div class="xp"><div style="width:' +
     pct +
-    '%"></div></div></div><img src="' +
-    spr(ST.g === "k" ? GIRL : MAN) +
-    '" style="width:56px;image-rendering:pixelated" alt=""></div>';
+    '%"></div></div></div>' +
+    avatar +
+    "</div>";
+
   h += tab === 0 ? tToday() : tab === 1 ? tRoad() : tInspo();
   h +=
     '<nav><button class="' +
@@ -154,7 +187,7 @@ function tToday() {
       testBox(t)
     );
   }
-  var task = (ST.g === "k" ? K : M)[d - 1];
+  var task = ST.mode === "solo" ? SINGLE[d - 1] : (ST.g === "k" ? K : M)[d - 1];
   h +=
     '<div class="px r"><h2 class="pf">DZIEŃ ' +
     d +
@@ -168,12 +201,14 @@ function tToday() {
     task +
     "</span></label></div>";
   h +=
-    '<div class="px g"><h2 class="pf">BOJOWE WYZWANIE</h2><label class="row"><input type="checkbox" data-a="hdone" data-d="' +
+    '<div class="px g"><h2 class="pf">' +
+    (ST.mode === "solo" ? "MAŁY KROK DLA SIEBIE" : "BOJOWE WYZWANIE") +
+    '</h2><label class="row"><input type="checkbox" data-a="hdone" data-d="' +
     d +
     '" ' +
     (ST.hdone[d] ? "checked" : "") +
     "><span>" +
-    H[d - 1] +
+    (ST.mode === "solo" ? SINGLE_H[d - 1] : H[d - 1]) +
     "</span></label></div>";
   h +=
     '<div class="px"><h2 class="pf">CYTAT DNIA</h2><p><i>„' +
@@ -241,8 +276,10 @@ function tRoad() {
   h += '</div></div><div class="px g"><h2 class="pf">OSIĄGNIĘCIA</h2>';
   var b = [];
   if (cnt(ST.open) >= 1) b.push("Pierwsze okienko");
-  if (cnt(ST.done) >= 5) b.push("5 gestów miłości");
-  if (cnt(ST.hdone) >= 5) b.push("5 domowych bitew");
+  if (cnt(ST.done) >= 5)
+    b.push(ST.mode === "solo" ? "5 dobrych gestów" : "5 gestów miłości");
+  if (cnt(ST.hdone) >= 5)
+    b.push(ST.mode === "solo" ? "5 małych kroków" : "5 domowych bitew");
   if (cnt(ST.open) >= 12) b.push("Półmetek adwentu");
   if (cnt(ST.open) >= 24) b.push("Wigilijny bohater");
   h += b.length
@@ -255,19 +292,16 @@ function tRoad() {
   h +=
     '<p class="small">Gestów miłości: ' +
     cnt(ST.done) +
-    "/24 · Domowych wyzwań: " +
+    "/24 · " +
+    (ST.mode === "solo" ? "małych kroków: " : "domowych wyzwań: ") +
     cnt(ST.hdone) +
     "/24</p></div>";
   h +=
     '<div class="px"><button class="chip" data-a="reset">Zmień rolę lub zacznij od nowa</button></div>';
   return h;
 }
-var PK = {},
-  PLAY = {};
-function ytId(u) {
-  var m = u && u.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/);
-  return m ? m[1] : null;
-}
+var PK = {};
+
 function tInspo() {
   var h = "";
   ["film", "song", "dish"].forEach(function (k) {
@@ -292,32 +326,32 @@ function tInspo() {
       "</p>";
 
     // Jeśli piosenka ma link do YouTube, dodajemy przycisk otwierający klip
-    // if (currentUrl) {
-    //   h +=
-    //     '<a href="' +
-    //     currentUrl +
-    //     '" target="_blank" class="btn s" style="display:inline-block;text-decoration:none;margin-bottom:10px;background:#c8312b;color:#fff;">▶ POSŁUCHAJ NA YT</a><br>';
-    // }
-
-    var vid = ytId(currentUrl);
-    if (vid) {
-      if (PLAY[k] === p) {
-        h +=
-          '<iframe src="https://www.youtube-nocookie.com/embed/' +
-          vid +
-          '?autoplay=1&rel=0&playsinline=1" title="Odtwarzacz YouTube" ' +
-          'style="width:100%;aspect-ratio:16/9;border:4px solid var(--brown);background:#000;margin-bottom:8px" ' +
-          'allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>' +
-          '<p class="small"><a href="' +
-          currentUrl +
-          '" target="_blank" rel="noopener">Nie działa? Otwórz w YouTube</a></p>';
-      } else {
-        h +=
-          '<button class="btn s" data-a="play" data-k="' +
-          k +
-          '" style="margin-bottom:10px">▶ POSŁUCHAJ</button><br>';
-      }
+    if (currentUrl) {
+      h +=
+        '<a href="' +
+        currentUrl +
+        '" target="_blank" class="btn s" style="display:inline-block;text-decoration:none;margin-bottom:10px;background:#c8312b;color:#fff;">▶ POSŁUCHAJ NA YT</a><br>';
     }
+
+    // var vid = ytId(currentUrl);
+    // if (vid) {
+    //   if (PLAY[k] === p) {
+    //     h +=
+    //       '<iframe src="https://www.youtube-nocookie.com/embed/' +
+    //       vid +
+    //       '?autoplay=1&rel=0&playsinline=1" title="Odtwarzacz YouTube" ' +
+    //       'style="width:100%;aspect-ratio:16/9;border:4px solid var(--brown);background:#000;margin-bottom:8px" ' +
+    //       'allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>' +
+    //       '<p class="small"><a href="' +
+    //       currentUrl +
+    //       '" target="_blank" rel="noopener">Nie działa? Otwórz w YouTube</a></p>';
+    //   } else {
+    //     h +=
+    //       '<button class="btn s" data-a="play" data-k="' +
+    //       k +
+    //       '" style="margin-bottom:10px">▶ POSŁUCHAJ</button><br>';
+    //   }
+    // }
 
     h +=
       '<button class="btn s" data-a="rnd" data-k="' +
@@ -360,7 +394,10 @@ document.addEventListener("click", function (e) {
   if (!el) return;
   var a = el.dataset.a,
     d = +el.dataset.d;
-  if (a === "pick") {
+  if (a === "mode") {
+    ST.mode = el.dataset.mode;
+    if (ST.mode === "solo") ST.g = "s";
+  } else if (a === "pick") {
     ST.g = el.dataset.g;
   } else if (a === "tab") {
     tab = +el.dataset.i;
@@ -378,24 +415,36 @@ document.addEventListener("click", function (e) {
       ST.test = d;
       ST.v = d;
     }
-  } else if (a === "play") {
-    PLAY[el.dataset.k] = PK[el.dataset.k] || 0;
   } else if (a === "rnd") {
-    var o = INS[el.dataset.k];
-    PK[el.dataset.k] = Math.floor(Math.random() * o.l.length);
-    PLAY[el.dataset.k] = undefined;
+    var key = el.dataset.k;
+    var o = INS[key];
+
+    if (o && o.l && o.l.length > 0) {
+      var newIndex;
+
+      if (o.l.length > 1) {
+        do {
+          newIndex = Math.floor(Math.random() * o.l.length);
+        } while (newIndex === PK[key]);
+      } else {
+        newIndex = 0;
+      }
+
+      PK[key] = newIndex;
+    }
   } else if (a === "sel") {
     PK[el.dataset.k] = +el.dataset.i;
-    PLAY[el.dataset.k] = undefined;
   } else if (a === "reset") {
     if (confirm("Na pewno? Cały postęp zostanie usunięty.")) {
       ST = {
+        mode: null,
         g: null,
         open: {},
         done: {},
         hdone: {},
         test: null,
         v: null,
+        xpBonus: 0,
       };
       tab = 0;
     }
